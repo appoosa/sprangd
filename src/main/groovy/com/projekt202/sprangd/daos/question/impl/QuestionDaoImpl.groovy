@@ -16,6 +16,6 @@ class QuestionDaoImpl implements QuestionDao {
     @Override
     List<QuestionEntity> getAll() {
         log.info 'Querying database for all questions'
-        [ new QuestionEntity(question: 'How many planets are there?', answer: '9') ]
+        [ new QuestionEntity(question: 'How many planets are there?', answer: '8') ]
     }
 }
