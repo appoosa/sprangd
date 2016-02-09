@@ -12,6 +12,7 @@ import groovy.transform.ToString
 @Canonical
 @ToString(cache=true, includeNames=true, includePackage=false)
 class QuestionDoc {
+    Long id
     String question
     String answer
 }
