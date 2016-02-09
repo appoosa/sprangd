@@ -1,0 +1,25 @@
+
+# vim files
+*~
+*.swp
+
+# gradle build files
+build/
+*/build/*
+**/build/*
+.gradle/*
+out/*
+*/out/*
+**/*.class
+libpeerconnection.log
+
+# intellij files
+*.iws
+*.iml
+*.ipr
+*/*.iws
+*/*.iml
+*/*.ipr
+
+# testing files
+derby.log
