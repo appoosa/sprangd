@@ -17,6 +17,7 @@ libpeerconnection.log
 *.iws
 *.iml
 *.ipr
+*.ids
 */*.iws
 */*.iml
 */*.ipr

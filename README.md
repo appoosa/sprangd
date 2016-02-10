@@ -8,35 +8,51 @@ Note:  For all commands below, use gradlew for linux/osx based systems or
 gradle.bat for windows based systems.  For the purpose of exxamples, we use
 gradlew.
 
-**To generate IntelliJ project files:**
+To do anything docker related, you must have docker installed.  If you haven't done so, use
+docker toolbox to get docker running on your system.
+
+*We have devtools installed, allowing you to view changes without having
+to restart tomcat.  If you change static content, just refresh the browser. If
+you modify java/groovy, do a simple 'Make Project' in IntelliJ (very fast).*
+
+### Running the project
+
+Select H2 or Postgres below.  When ready, pull up the main page by directing your browser to http://localhost:8080.
+
+### IntelliJ Project Generation
 
     gradlew idea
 
-**To locally run the application (outside of docker, for now):**
+### Run project with H2
 
-    gradlew bootRun
+    # Use H2, an in memory database that will lost all content if tomcat is restarted
+    SPRING_PROFILES_ACTIVE=test ./gradlew bootRun
 
-Note: we have devtools installed, allowing you to view changes without having
-to restart tomcat.  If you change static content, just relfresh the browser. If
-you modify java/groovy, do a simple 'Make Project' in IntelliJ (very fast).
+### Run project against postgres
 
-To pull up the main page, direct your web browser to http://localhost:8080.
+    # first start up postgres in a docker container
+    docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword --net host -d -p 5423:5423 postgres
+
+    # next, start up spring boot and tell it to use the local spring profile and provide the docker machine IP address
+    SPRING_PROFILES_ACTIVE=local DB_HOSTNAME="$(docker-machine ip default)" ./gradlew bootRun
 
 ## Packaging into docker image
 
-*You must have docker installed.  For OSX and Windows based systems, use the
-docker toolbox to install the necessary components.*
 
-**To package the application in a docker image:**
+### Build Spring Boot docker image
 
     gradlew docker
 
-**To run the image:**
+### Run the Spring Boot docker container against Postgres
 
-    docker run --name sprangd -p 8080:8080 projekt202.com/spring:0.0.1
+    # start postgres container
+    docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword --net host -d -p 5423:5423 postgres
+
+    # start spring boot
+    docker run --name sprangd -e SPRING_PROFILES_ACTIVE=local -e DB_HOSTNAME=$(docker-machine ip default) -p 8080:8080 projekt202.com/sprangd:0.0.1
 
 To pull up the main page:
 
-OSX (machine_name=default if you have not modified it):
+*OSX*:
 
-    open http://${docker-machine ip <machine_name>}:8080
+    open http://${docker-machine ip default}:8080
